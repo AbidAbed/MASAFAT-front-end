@@ -5,7 +5,10 @@ This is a new [**React Native**](https://reactnative.dev) project, bootstrapped 
 
 >**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
 
-**NOTE** : you can find the APK file in the folloiwng dir : android\app\build\outputs\apk\debug
+**NOTE** : you can find the APK-debug file in the following dir : / , named MASAFAT.apk
+
+**NOTE** : instructions on how to generate the APK release is at the following site : https://instamobile.io/android-development/generate-react-native-release-build-android/ ,
+the released APK can be found in the following dir : 
 ## Step 1: Start the Metro Server
 
 First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
