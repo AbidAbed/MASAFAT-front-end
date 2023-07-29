@@ -29,6 +29,7 @@ function Signup() {
       } else {
         dispatch(changePath('/map'));
         dispatch(fetchUser(postSignupResponse.data));
+        dispatch(puchHistory("/map"))
       }
     }
   }, [postSignupResponse]);

@@ -58,6 +58,7 @@ const Login = () => {
       } else {
         dispatch(changePath('/map'));
         dispatch(fetchUser(postLoginResponse.data));
+        dispatch(puchHistory('/map'));
       }
     }
   }, [postLoginResponse]);
