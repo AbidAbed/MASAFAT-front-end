@@ -1,11 +1,16 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import useValidating from '../Hooks/useValidating';
 import Input from '../Components/Input';
 import Button from '../Components/Button';
 import {useDispatch, useSelector} from 'react-redux';
-import {changePath, puchHistory} from '../Store/SotreInterface';
+import {
+  changePath,
+  puchHistory,
+  usePostLoginMutation,
+} from '../Store/SotreInterface';
 import logoImage from '../Assets/MASAFAT_LOGO.png';
+import {fetchUser} from '../Store/Slices/UserSlice';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,13 +18,14 @@ const Login = () => {
   const [errors, setErrors] = useState('');
   const {validateEmail, validatePassword} = useValidating();
   const dispatch = useDispatch();
+  const [postLogin, postLoginResponse] = usePostLoginMutation();
 
   function handleSignup() {
     dispatch(changePath('/signup'));
     dispatch(puchHistory('/signup'));
   }
 
-  function handleForfotPassword() {
+  function handleForgetPassword() {
     dispatch(changePath('/rePass'));
     dispatch(puchHistory('/rePass'));
   }
@@ -38,9 +44,23 @@ const Login = () => {
     setErrors(_errors_);
 
     if (_errors_ !== '') return;
+    else {
+      postLogin({email, password});
+    }
 
     setErrors('');
   };
+
+  useEffect(() => {
+    if (!postLoginResponse.isUninitialized && !postLoginResponse.isLoading) {
+      if (postLoginResponse.isError) {
+        setErrors('invalid email or password');
+      } else {
+        dispatch(changePath('/map'));
+        dispatch(fetchUser(postLoginResponse.data));
+      }
+    }
+  }, [postLoginResponse]);
 
   function onEmailChange(text) {
     setEmail(text);
@@ -88,7 +108,7 @@ const Login = () => {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={handleForfotPassword}>
+      <TouchableOpacity onPress={handleForgetPassword}>
         <Text style={styles.touchableText}>Forgot your password?</Text>
       </TouchableOpacity>
     </View>
