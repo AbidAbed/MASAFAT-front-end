@@ -1,12 +1,18 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Text, View, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import useValidating from '../Hooks/useValidating';
 import Input from '../Components/Input';
 import Button from '../Components/Button';
 import {useDispatch} from 'react-redux';
-import {changePath, popHistory, puchHistory} from '../Store/SotreInterface';
+import {
+  changePath,
+  popHistory,
+  puchHistory,
+  usePostSignupMutation,
+} from '../Store/SotreInterface';
 import BackButton from '../Components/BackButton';
 import logoImage from '../Assets/MASAFAT_LOGO.png';
+import {fetchUser} from '../Store/Slices/UserSlice';
 function Signup() {
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -14,7 +20,19 @@ function Signup() {
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
   const [errors, setErrors] = useState('');
+  const [postSignup, postSignupResponse] = usePostSignupMutation();
 
+  useEffect(() => {
+    if (!postSignupResponse.isUninitialized && !postSignupResponse.isLoading) {
+      if (postSignupResponse.isError) {
+        setErrors('something went wrong , try again');
+      } else {
+        dispatch(changePath('/map'));
+        dispatch(fetchUser(postSignupResponse.data));
+        dispatch(puchHistory("/map"))
+      }
+    }
+  }, [postSignupResponse]);
   const {
     validateEmail,
     validatePassword,
@@ -23,7 +41,7 @@ function Signup() {
     validateRePassword,
   } = useValidating();
   const dispatch = useDispatch();
-
+  //trying to push with my account
   function handleLogin() {
     dispatch(changePath('/login'));
     dispatch(popHistory());
@@ -59,6 +77,9 @@ function Signup() {
     setErrors(_errors_);
 
     if (_errors_ !== '') return;
+    else {
+      postSignup({name: fullName, phoneNumber, email, password});
+    }
 
     setErrors('');
   };
