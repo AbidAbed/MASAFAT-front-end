@@ -1,7 +1,7 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import {TouchableOpacity, StyleSheet, Text} from 'react-native';
 
-function Button({ onClick, buttonText, style, children }) {
+function Button({onClick, buttonText, style, children}) {
   return (
     <TouchableOpacity style={style || styles.button} onPress={onClick}>
       {buttonText && <Text style={styles.buttonText}>{buttonText}</Text>}

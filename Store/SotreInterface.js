@@ -5,6 +5,7 @@ import {
   changePath,
   puchHistory,
   popHistory,
+  changeIsLocationGranted,
 } from './Slices/ConfigSlice';
 
 import {
@@ -13,9 +14,11 @@ import {
   usePostLoginMutation,
   usePostSignupMutation,
 } from './APIs/AuthAPI';
+import {GaragesSlice, fetchGarages} from './Slices/GaragesSlice';
 const Store = configureStore({
   reducer: {
     config: ConfigSlice.reducer,
+    garages: GaragesSlice.reducer,
     [AuthAPI.reducerPath]: AuthAPI.reducer,
   },
   middleware: getDefaultMiddleware =>
@@ -30,4 +33,6 @@ export {
   usePostAuthMutation,
   usePostLoginMutation,
   usePostSignupMutation,
+  fetchGarages,
+  changeIsLocationGranted,
 };

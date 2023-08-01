@@ -1,6 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
       android:name=".MainApplication"
@@ -9,6 +10,9 @@
       android:roundIcon="@mipmap/masafat_logo"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
+      <meta-data
+    android:name="com.google.android.geo.API_KEY"
+    android:value="AIzaSyD0PkTp0ly-RH0wfWKcV5qgud42ws9gCZ8" />
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
