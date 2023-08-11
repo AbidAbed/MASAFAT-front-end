@@ -13,8 +13,8 @@ import logoImage from '../Assets/MASAFAT_LOGO.png';
 import {fetchUser} from '../Store/Slices/UserSlice';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('test3@masafat.edu');
+  const [password, setPassword] = useState('P@ssW0rd');
   const [errors, setErrors] = useState('');
   const {validateEmail, validatePassword} = useValidating();
   const dispatch = useDispatch();

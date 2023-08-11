@@ -7,17 +7,23 @@ function Input({
   keyboardType,
   autoCapitalize,
   secureTextEntry,
+  style,
+  placeholderTextColor,
+  textAlign,
+  onSubmitEditing,
 }) {
   return (
     <TextInput
-      style={styles.input}
+      style={style || styles.input}
       placeholder={placeholder}
-      placeholderTextColor="#c9d1d9"
+      placeholderTextColor={placeholderTextColor || '#c9d1d9'}
       onChangeText={text => onChange(text)}
       value={value}
       keyboardType={keyboardType}
       autoCapitalize={autoCapitalize}
       secureTextEntry={secureTextEntry}
+      textAlign={textAlign || 'center'}
+      onSubmitEditing={onSubmitEditing}
     />
   );
 }
@@ -31,6 +37,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingHorizontal: 10,
     color: '#89b4dc',
+    textAlign: 'center',
   },
 });
 export default Input;
