@@ -3,7 +3,7 @@ import {setupListeners} from '@reduxjs/toolkit/dist/query';
 import {
   ConfigSlice,
   changePath,
-  puchHistory,
+  pushHistory,
   popHistory,
   changeIsLocationGranted,
 } from './Slices/ConfigSlice';
@@ -28,7 +28,7 @@ setupListeners(Store.dispatch);
 export {
   Store,
   changePath,
-  puchHistory,
+  pushHistory,
   popHistory,
   usePostAuthMutation,
   usePostLoginMutation,

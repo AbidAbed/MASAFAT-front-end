@@ -6,7 +6,7 @@ import Button from '../Components/Button';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   changePath,
-  puchHistory,
+  pushHistory,
   usePostLoginMutation,
 } from '../Store/SotreInterface';
 import logoImage from '../Assets/MASAFAT_LOGO.png';
@@ -22,12 +22,12 @@ const Login = () => {
 
   function handleSignup() {
     dispatch(changePath('/signup'));
-    dispatch(puchHistory('/signup'));
+    dispatch(pushHistory('/signup'));
   }
 
   function handleForgetPassword() {
     dispatch(changePath('/rePass'));
-    dispatch(puchHistory('/rePass'));
+    dispatch(pushHistory('/rePass'));
   }
 
   const handleLogin = () => {
@@ -58,7 +58,7 @@ const Login = () => {
       } else {
         dispatch(changePath('/map'));
         dispatch(fetchUser(postLoginResponse.data));
-        dispatch(puchHistory('/map'));
+        dispatch(pushHistory('/map'));
       }
     }
   }, [postLoginResponse]);
@@ -99,7 +99,7 @@ const Login = () => {
         value={password}
         secureTextEntry={true}
       />
-      <Button buttonText="Login" onClick={handleLogin} />
+      <Button buttonText="Login" onClick={handleLogin}/>
 
       {errors !== '' && <Text style={styles.errorText}>{errors}</Text>}
 

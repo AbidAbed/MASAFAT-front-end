@@ -13,7 +13,7 @@ function BackButton() {
   }
 
   return (
-    <Button onClick={handleOnClick} style={styles.button}>
+    <Button onClick={handleOnClick} style={styles.button} styleCont={{marginTop:1}}>
       <Icon name="arrow-back" size={24} color="white" />
     </Button>
   );

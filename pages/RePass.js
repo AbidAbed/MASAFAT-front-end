@@ -4,7 +4,7 @@ import useValidating from '../Hooks/useValidating';
 import Input from '../Components/Input';
 import Button from '../Components/Button';
 import {useDispatch} from 'react-redux';
-import {changePath, puchHistory} from '../Store/SotreInterface';
+import {changePath, pushHistory} from '../Store/SotreInterface';
 import BackButton from '../Components/BackButton';
 import logoImage from '../Assets/MASAFAT_LOGO.png';
 function RePass() {
@@ -15,12 +15,12 @@ function RePass() {
 
   function handleLogin() {
     dispatch(changePath('/login'));
-    dispatch(puchHistory('/login'));
+    dispatch(pushHistory('/login'));
   }
 
   function handleSignup() {
     dispatch(changePath('/signup'));
-    dispatch(puchHistory('/signup'));
+    dispatch(pushHistory('/signup'));
   }
 
   const handleForgotPassword = () => {

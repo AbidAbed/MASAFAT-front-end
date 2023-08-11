@@ -6,7 +6,7 @@ const ConfigSlice = createSlice({
     changePath(state, action) {
       return {...state, path: action.payload};
     },
-    puchHistory(state, action) {
+    pushHistory(state, action) {
       return {...state, history: [action.payload, ...state.history]};
     },
     popHistory(state, action) {
@@ -21,5 +21,5 @@ const ConfigSlice = createSlice({
   },
 });
 export {ConfigSlice};
-export const {changePath, puchHistory, popHistory, changeIsLocationGranted} =
+export const {changePath, pushHistory, popHistory, changeIsLocationGranted} =
   ConfigSlice.actions;

@@ -1,8 +1,8 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/dist/query/react';
 const AuthAPI = createApi({
   reducerPath: 'AuthAPI',
-  baseQuery: fetchBaseQuery({baseUrl: 'http://192.168.56.1:8080'}), //replace 192.168.56.1 with the host machine
-  endpoints(builder) {
+  baseQuery: fetchBaseQuery({baseUrl: 'https://1d54-109-107-253-231.ngrok-free.app'}), //replace 192.168.56.1 with the host machine
+  endpoints(builder) {                 
     return {
       postAuth: builder.mutation({
         query: logInData => {

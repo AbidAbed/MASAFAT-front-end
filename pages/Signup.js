@@ -7,7 +7,7 @@ import {useDispatch} from 'react-redux';
 import {
   changePath,
   popHistory,
-  puchHistory,
+  pushHistory,
   usePostSignupMutation,
 } from '../Store/SotreInterface';
 import BackButton from '../Components/BackButton';
@@ -29,7 +29,7 @@ function Signup() {
       } else {
         dispatch(changePath('/map'));
         dispatch(fetchUser(postSignupResponse.data));
-        dispatch(puchHistory("/map"))
+        dispatch(pushHistory("/map"))
       }
     }
   }, [postSignupResponse]);

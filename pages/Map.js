@@ -7,7 +7,7 @@ import {useEffect} from 'react';
 import Button from '../Components/Button';
 import Icon from 'react-native-vector-icons/Entypo';
 import {useDispatch} from 'react-redux';
-import {changePath, puchHistory} from '../Store/SotreInterface';
+import {changePath, pushHistory} from '../Store/SotreInterface';
 const {width, height} = Dimensions.get('window');
 
 function Map() {
@@ -23,12 +23,12 @@ function Map() {
     // Handle the "Enter" click from the keyboard here
     console.log('Search term:', search);
     dispatch(changePath('/search'));
-    dispatch(puchHistory('/search'));
+    dispatch(pushHistory('/search'));
   }
 
   function handleSettingsClick() {
     dispatch(changePath('/settings'));
-    dispatch(puchHistory('/settings'));
+    dispatch(pushHistory('/settings'));
   }
   useEffect(() => {
     const getLocation = async () => {
@@ -88,7 +88,7 @@ function Map() {
           textAlign="center" // Center the cursor when the input is empty
           onSubmitEditing={handleSearchSubmit} // Handle the "Enter" click
         />
-        <Button style={styles.button} onClick={handleSettingsClick}>
+        <Button style={styles.button} onClick={handleSettingsClick} styleCont={{marginTop:1}}>
           <Icon name="menu" size={30} color="#ccc" />
         </Button>
       </View>

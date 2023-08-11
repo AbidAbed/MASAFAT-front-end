@@ -1,11 +1,13 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet, Text} from 'react-native';
+import {TouchableOpacity, StyleSheet, Text, View} from 'react-native';
 
-function Button({onClick, buttonText, style, children}) {
+function Button({onClick, buttonText, style, children,styleCont}) {
   return (
     <TouchableOpacity style={style || styles.button} onPress={onClick}>
-      {buttonText && <Text style={styles.buttonText}>{buttonText}</Text>}
-      {children}
+      <View style={styleCont || styles.contentContainer}>
+        {children}
+        {buttonText && <Text style={styles.buttonText}>{buttonText}</Text>}
+      </View>
     </TouchableOpacity>
   );
 }
@@ -20,10 +22,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
+  contentContainer: {
+    flexDirection: 'row', // Set 'row' to arrange children and text in a row
+    alignItems: 'center', // Align children and text vertically in the center
+    paddingLeft: 10,
+  },
   buttonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+    textAlign: 'center', // Center the text horizontally
+    flex: 1, // Take up remaining space in the row
   },
 });
 
