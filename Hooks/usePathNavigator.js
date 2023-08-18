@@ -5,6 +5,9 @@ import RePass from '../pages/RePass';
 import Map from '../pages/Map';
 import Search from '../pages/Search';
 import Settings from '../pages/Settings';
+import Garage from '../pages/Garage';
+import Favorites from '../pages/Favorites';
+import Profile from '../pages/Profile';
 function usePathNavigator() {
   const {path} = useSelector(state => state.config);
   switch (path) {
@@ -20,6 +23,12 @@ function usePathNavigator() {
       return <Search />;
     case '/settings':
       return <Settings />;
+    case '/garage':
+      return <Garage />;
+    case '/favorites':
+      return <Favorites />;
+    case '/profile':
+      <Profile />;
     default:
       return <Login />;
   }

@@ -8,6 +8,7 @@ import {
   changeIsLocationGranted,
   changeUserLocation,
   changeSearchTerm,
+  changeRenderedGarageId,
 } from './Slices/ConfigSlice';
 
 import {
@@ -19,17 +20,28 @@ import {
 import {
   GaragesSlice,
   changeMapGarages,
-  changeSearchGarages,
+  fetchSearchGarages,
+  fetchFavoriteGarages,
+  addToFavorite,
+  deleteFavorite,
+  addBulkFavoriteGarages,
+  addBulkSearchGarages,
 } from './Slices/GaragesSlice';
 import {
   GaragesAPI,
   useGetNearbyGaragesMutation,
   useGetSearchGaragesQuery,
+  usePostFavoriteGarageMutation,
+  useGetFavoriteGaragesQuery,
+  useDeleteFavoriteGarageMutation,
+  useGetGarageByIdQuery,
 } from './APIs/GaragesAPI';
+import {UserSlice, fetchUser} from './Slices/UserSlice';
 const Store = configureStore({
   reducer: {
     config: ConfigSlice.reducer,
     garages: GaragesSlice.reducer,
+    user: UserSlice.reducer,
     [AuthAPI.reducerPath]: AuthAPI.reducer,
     [GaragesAPI.reducerPath]: GaragesAPI.reducer,
   },
@@ -53,5 +65,16 @@ export {
   changeUserLocation,
   changeSearchTerm,
   useGetSearchGaragesQuery,
-  changeSearchGarages
+  fetchSearchGarages,
+  fetchUser,
+  useGetGarageByIdQuery,
+  usePostFavoriteGarageMutation,
+  useGetFavoriteGaragesQuery,
+  useDeleteFavoriteGarageMutation,
+  addBulkFavoriteGarages,
+  addBulkSearchGarages,
+  changeRenderedGarageId,
+  fetchFavoriteGarages,
+  addToFavorite,
+  deleteFavorite,
 };

@@ -1,7 +1,7 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/dist/query/react';
 const AuthAPI = createApi({
   reducerPath: 'AuthAPI',
-  baseQuery: fetchBaseQuery({baseUrl: 'http://172.19.112.1:8080'}), //replace ipv4 with the host machine
+  baseQuery: fetchBaseQuery({baseUrl: 'http://172.24.80.1:8080'}), //replace ipv4 with the host machine
   endpoints(builder) {
     return {
       postAuth: builder.mutation({

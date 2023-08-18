@@ -10,6 +10,7 @@ const ConfigSlice = createSlice({
       latitude: 31.99020511580862,
     },
     searchTerm: null,
+    renderedGarageId: null,
   },
   reducers: {
     changePath(state, action) {
@@ -33,6 +34,9 @@ const ConfigSlice = createSlice({
     changeSearchTerm(state, action) {
       return {...state, searchTerm: action.payload};
     },
+    changeRenderedGarageId(state, action) {
+      return {...state, renderedGarageId: action.payload};
+    },
   },
 });
 export {ConfigSlice};
@@ -43,4 +47,5 @@ export const {
   changeIsLocationGranted,
   changeUserLocation,
   changeSearchTerm,
+  changeRenderedGarageId,
 } = ConfigSlice.actions;

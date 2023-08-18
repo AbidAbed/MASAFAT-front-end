@@ -12,14 +12,39 @@ import {
   changePath,
   changeSearchTerm,
   pushHistory,
+  useGetFavoriteGaragesQuery,
   useGetNearbyGaragesMutation,
 } from '../Store/SotreInterface';
 import useRadiousCalculator from '../Hooks/useRadiousCalculator';
 import mapPinImage from '../Assets/mapPin.png';
+import {
+  changeRenderedGarageId,
+  fetchFavoriteGarages,
+} from '../Store/SotreInterface';
 const {width, height} = Dimensions.get('window');
 
 function Map({selectedGarage}) {
   const {mapGarages} = useSelector(state => state.garages);
+  const user_id = useSelector(state => state.user.id);
+
+  const getFavourtiesResponse = useGetFavoriteGaragesQuery({
+    user_id,
+    size: 10,
+    page: 0,
+  });
+
+  useEffect(() => {
+    console.log(getFavourtiesResponse);
+    if (
+      !getFavourtiesResponse.isUninitialized &&
+      !getFavourtiesResponse.isLoading
+    ) {
+      if (getFavourtiesResponse.isError) {
+      } else {
+        dispatch(fetchFavoriteGarages(getFavourtiesResponse.data));
+      }
+    }
+  }, [getFavourtiesResponse]);
 
   const [userLongitude, setUserLongitude] = useState(35.94400120899081);
   const [userLatitude, setUserLatitude] = useState(31.99020511580862);
@@ -41,6 +66,9 @@ function Map({selectedGarage}) {
 
   function handleGarageClick(garage_id) {
     console.log(garage_id);
+    dispatch(changePath('/garage'));
+    dispatch(pushHistory('/garage'));
+    dispatch(changeRenderedGarageId(garage_id));
   }
   function handleSearchSubmit() {
     // Handle the "Enter" click from the keyboard here
@@ -225,7 +253,7 @@ const styles = StyleSheet.create({
     width: '50%',
     fontFamily: 'italic',
     fontSize: 18,
-    fontWeight: 'bold', 
+    fontWeight: 'bold',
   },
   errorText: {
     fontSize: 20,

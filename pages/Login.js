@@ -59,6 +59,7 @@ const Login = () => {
         dispatch(changePath('/map'));
         dispatch(fetchUser(postLoginResponse.data));
         dispatch(pushHistory('/map'));
+        dispatch(fetchUser(postLoginResponse.data));
       }
     }
   }, [postLoginResponse]);
@@ -99,7 +100,7 @@ const Login = () => {
         value={password}
         secureTextEntry={true}
       />
-      <Button buttonText="Login" onClick={handleLogin}/>
+      <Button buttonText="Login" onClick={handleLogin} />
 
       {errors !== '' && <Text style={styles.errorText}>{errors}</Text>}
 
