@@ -22,6 +22,7 @@ const GaragesSlice = createSlice({
       return {...state, favoriteGarages: [...action.payload]};
     },
     addToFavorite(state, action) {
+      console.log(222222222222222222222221, action.payload);
       return {
         ...state,
         favoriteGarages: [...state.favoriteGarages, action.payload],
@@ -29,9 +30,9 @@ const GaragesSlice = createSlice({
     },
     deleteFavorite(state, action) {
       const fnewFavoriteGarages = state.favoriteGarages.filter(fGarage => {
+        console.log(fGarage.id, action.payload);
         return fGarage.id !== action.payload;
       });
-      console.log(2222, fnewFavoriteGarages);
       return {...state, favoriteGarages: [...fnewFavoriteGarages]};
     },
     addBulkFavoriteGarages(state, action) {

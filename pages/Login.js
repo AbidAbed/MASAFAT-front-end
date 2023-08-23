@@ -13,7 +13,7 @@ import logoImage from '../Assets/MASAFAT_LOGO.png';
 import {fetchUser} from '../Store/Slices/UserSlice';
 
 const Login = () => {
-  const [email, setEmail] = useState('test5@masafat.edu');
+  const [email, setEmail] = useState('test100@masafat.edu');
   const [password, setPassword] = useState('P@ss2Word');
   const [errors, setErrors] = useState('');
   const {validateEmail, validatePassword} = useValidating();
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: 'red',
+    color: '#D25157',
     marginTop: 10,
   },
   logo: {

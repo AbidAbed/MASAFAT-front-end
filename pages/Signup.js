@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: 'red',
+    color: '#D25157',
     marginTop: 10,
   },
   logo: {

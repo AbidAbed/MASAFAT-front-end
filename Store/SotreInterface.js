@@ -9,6 +9,8 @@ import {
   changeUserLocation,
   changeSearchTerm,
   changeRenderedGarageId,
+  changeAvailableSlots,
+  changeReservation,
 } from './Slices/ConfigSlice';
 
 import {
@@ -16,6 +18,7 @@ import {
   usePostAuthMutation,
   usePostLoginMutation,
   usePostSignupMutation,
+  usePutUserMutation,
 } from './APIs/AuthAPI';
 import {
   GaragesSlice,
@@ -32,23 +35,37 @@ import {
   useGetNearbyGaragesMutation,
   useGetSearchGaragesQuery,
   usePostFavoriteGarageMutation,
-  useGetFavoriteGaragesQuery,
+  useGetFavoriteGaragesMutation,
   useDeleteFavoriteGarageMutation,
   useGetGarageByIdQuery,
 } from './APIs/GaragesAPI';
 import {UserSlice, fetchUser} from './Slices/UserSlice';
+import {
+  ReservationAPI,
+  usePostCheckReservationMutation,
+  usePostReserveGarageMutation,
+  useGetReservationsMutation,
+} from './APIs/ReservationAPI';
+import {
+  ReservationSlice,
+  fetchHistory,
+  addHistory,
+} from './Slices/ReservationSlice';
 const Store = configureStore({
   reducer: {
     config: ConfigSlice.reducer,
     garages: GaragesSlice.reducer,
+    reservation: ReservationSlice.reducer,
     user: UserSlice.reducer,
     [AuthAPI.reducerPath]: AuthAPI.reducer,
     [GaragesAPI.reducerPath]: GaragesAPI.reducer,
+    [ReservationAPI.reducerPath]: ReservationAPI.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware()
       .concat(AuthAPI.middleware)
-      .concat(GaragesAPI.middleware),
+      .concat(GaragesAPI.middleware)
+      .concat(ReservationAPI.middleware),
 });
 setupListeners(Store.dispatch);
 export {
@@ -69,7 +86,7 @@ export {
   fetchUser,
   useGetGarageByIdQuery,
   usePostFavoriteGarageMutation,
-  useGetFavoriteGaragesQuery,
+  useGetFavoriteGaragesMutation,
   useDeleteFavoriteGarageMutation,
   addBulkFavoriteGarages,
   addBulkSearchGarages,
@@ -77,4 +94,12 @@ export {
   fetchFavoriteGarages,
   addToFavorite,
   deleteFavorite,
+  usePostCheckReservationMutation,
+  changeAvailableSlots,
+  usePostReserveGarageMutation,
+  changeReservation,
+  fetchHistory,
+  useGetReservationsMutation,
+  addHistory,
+  usePutUserMutation,
 };

@@ -2,7 +2,7 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/dist/query/react';
 const GaragesAPI = createApi({
   reducerPath: 'GaragesAPI',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://172.24.80.1:8080',
+    baseUrl: 'https://fda5-109-107-242-57.ngrok-free.app',
   }), //replace 192.168.56.1 with the host machine
   endpoints(builder) {
     return {
@@ -29,11 +29,11 @@ const GaragesAPI = createApi({
           return {
             url: '/users/favorites',
             method: 'POST',
-            body: {...data},
+            body: {garage: {id: data.garage_id}, user: {id: data.user_id}},
           };
         },
       }),
-      getFavoriteGarages: builder.query({
+      getFavoriteGarages: builder.mutation({
         query: data => {
           return {
             url: `/users/${data.user_id}/favorites`,
@@ -67,7 +67,7 @@ export const {
   useGetNearbyGaragesMutation,
   useGetSearchGaragesQuery,
   usePostFavoriteGarageMutation,
-  useGetFavoriteGaragesQuery,
+  useGetFavoriteGaragesMutation,
   useDeleteFavoriteGarageMutation,
   useGetGarageByIdQuery,
 } = GaragesAPI;

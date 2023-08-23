@@ -4,15 +4,14 @@ import Input from '../Components/Input';
 import Geolocation from 'react-native-geolocation-service';
 import MapView, {Callout, Marker} from 'react-native-maps';
 import {useEffect} from 'react';
-import Button from '../Components/Button';
-import Icon from 'react-native-vector-icons/Entypo';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  addBulkFavoriteGarages,
   changeMapGarages,
   changePath,
   changeSearchTerm,
   pushHistory,
-  useGetFavoriteGaragesQuery,
+  useGetFavoriteGaragesMutation,
   useGetNearbyGaragesMutation,
 } from '../Store/SotreInterface';
 import useRadiousCalculator from '../Hooks/useRadiousCalculator';
@@ -21,17 +20,19 @@ import {
   changeRenderedGarageId,
   fetchFavoriteGarages,
 } from '../Store/SotreInterface';
+import Menu from '../Components/Menu';
 const {width, height} = Dimensions.get('window');
 
 function Map({selectedGarage}) {
   const {mapGarages} = useSelector(state => state.garages);
   const user_id = useSelector(state => state.user.id);
 
-  const getFavourtiesResponse = useGetFavoriteGaragesQuery({
-    user_id,
-    size: 10,
-    page: 0,
-  });
+  const [getFavoriteGarages, getFavourtiesResponse] =
+    useGetFavoriteGaragesMutation();
+
+  useEffect(() => {
+    getFavoriteGarages({user_id, page: 0, size: 10});
+  }, []);
 
   useEffect(() => {
     console.log(getFavourtiesResponse);
@@ -41,7 +42,10 @@ function Map({selectedGarage}) {
     ) {
       if (getFavourtiesResponse.isError) {
       } else {
-        dispatch(fetchFavoriteGarages(getFavourtiesResponse.data));
+        const fGarages = getFavourtiesResponse.data.map(
+          favorite => favorite.garage,
+        );
+        dispatch(addBulkFavoriteGarages(fGarages));
       }
     }
   }, [getFavourtiesResponse]);
@@ -183,7 +187,6 @@ function Map({selectedGarage}) {
                 <Callout onPress={garageClickCallback}>
                   <View style={styles.markerContainer}>
                     <Text style={styles.markerTitle}>{garage.name}</Text>
-                    <Text style={styles.markerDescription}>{garage.area}</Text>
                   </View>
                 </Callout>
               </Marker>
@@ -204,12 +207,7 @@ function Map({selectedGarage}) {
           textAlign="center" // Center the cursor when the input is empty
           onSubmitEditing={handleSearchSubmit} // Handle the "Enter" click
         />
-        <Button
-          style={styles.button}
-          onClick={handleSettingsClick}
-          styleCont={{marginTop: 1}}>
-          <Icon name="menu" size={30} color="#ccc" />
-        </Button>
+        <Menu mapStyle={true} />
       </View>
       {errors ? (
         <View style={styles.errorContainer}>
@@ -254,11 +252,12 @@ const styles = StyleSheet.create({
     fontFamily: 'italic',
     fontSize: 18,
     fontWeight: 'bold',
+    backgroundColor: 'rgba(36, 80, 123, 0.3)',
   },
   errorText: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#FF0000',
+    color: '#D25157',
   },
   errorContainer: {
     backgroundColor: '#00000000',

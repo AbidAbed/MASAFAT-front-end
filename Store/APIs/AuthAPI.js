@@ -1,7 +1,9 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/dist/query/react';
 const AuthAPI = createApi({
   reducerPath: 'AuthAPI',
-  baseQuery: fetchBaseQuery({baseUrl: 'http://172.24.80.1:8080'}), //replace ipv4 with the host machine
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'https://fda5-109-107-242-57.ngrok-free.app',
+  }), //replace ipv4 with the host machine
   endpoints(builder) {
     return {
       postAuth: builder.mutation({
@@ -32,6 +34,15 @@ const AuthAPI = createApi({
           };
         },
       }),
+      putUser: builder.mutation({
+        query: putData => {
+          return {
+            url: '/users',
+            body: {...putData},
+            method: 'PUT',
+          };
+        },
+      }),
     };
   },
 });
@@ -40,4 +51,5 @@ export const {
   usePostAuthMutation,
   usePostLoginMutation,
   usePostSignupMutation,
+  usePutUserMutation,
 } = AuthAPI;

@@ -8,9 +8,10 @@ import {
   changeRenderedGarageId,
   changePath,
   pushHistory,
-  useGetFavoriteGaragesQuery,
+  useGetFavoriteGaragesMutation,
   usePostFavoriteGarageMutation,
   useDeleteFavoriteGarageMutation,
+  addToFavorite,
 } from '../Store/SotreInterface';
 import {
   View,
@@ -29,6 +30,7 @@ import {
   deleteFavorite,
   fetchFavoriteGarages,
 } from '../Store/SotreInterface';
+import Menu from '../Components/Menu';
 function Search() {
   const searchTerm = useSelector(state => state.config.searchTerm);
   let searchedGarages = useSelector(state => state.garages.searchGarages);
@@ -46,11 +48,13 @@ function Search() {
 
   const user_id = useSelector(state => state.user.id);
 
-  const getFavourtiesResponse = useGetFavoriteGaragesQuery({
-    user_id,
-    page: page,
-    size: 10,
-  });
+  const [getFavoriteGarages, getFavourtiesResponse] =
+    useGetFavoriteGaragesMutation();
+
+  useEffect(() => {
+    getFavoriteGarages({user_id, page: page, size: 10});
+  }, []);
+
   useEffect(() => {
     if (
       !getFavourtiesResponse.isUninitialized &&
@@ -58,9 +62,12 @@ function Search() {
     ) {
       if (getFavourtiesResponse.isError) {
       } else {
+        const fGarages = getFavourtiesResponse.data.map(
+          favorite => favorite.garage,
+        );
         if (page === 0 || !initialFetchComplete)
-          dispatch(fetchFavoriteGarages(getFavourtiesResponse.data));
-        else dispatch(addBulkFavoriteGarages(getFavourtiesResponse.data));
+          dispatch(fetchFavoriteGarages(fGarages));
+        else dispatch(addBulkFavoriteGarages(fGarages));
       }
     }
   }, [getFavourtiesResponse]);
@@ -108,10 +115,11 @@ function Search() {
 
   function handleNextPage() {
     searchResponse.refetch({search, page: page + 1, size: 10});
-    getFavourtiesResponse.refetch({user_id, page: page + 1, size: 10});
+    getFavoriteGarages({user_id, page: page + 1, size: 10});
     setPage(page + 1);
   }
   useEffect(() => {
+    console.log(postFavoriteGaragesResponse);
     if (
       !postFavoriteGaragesResponse.isUninitialized &&
       !postFavoriteGaragesResponse.isLoading
@@ -119,7 +127,7 @@ function Search() {
       if (postFavoriteGaragesResponse.isError) {
         // console.log(addFavoriteGarage());
       } else {
-        getFavourtiesResponse.refetch();
+        dispatch(addToFavorite(postFavoriteGaragesResponse.data.garage));
       }
     }
   }, [postFavoriteGaragesResponse]);
@@ -133,7 +141,7 @@ function Search() {
         // console.log(deleteFavourtieGaragesResponse);
       } else {
         dispatch(
-          deleteFavorite(deleteFavourtieGaragesResponse.originalArgs.garageID),
+          deleteFavorite(deleteFavourtieGaragesResponse.originalArgs.garage_id),
         );
       }
     }
@@ -173,39 +181,41 @@ function Search() {
     }
   }, [searchResponse]);
 
-  console.log(searchedGarages.length);
+  console.log(favoriteGarages.length);
   const renderItem = ({item}) => {
     const garageClickCallback = () => handleGarageClick(item.id);
     return (
       <TouchableOpacity onPress={garageClickCallback}>
         <View style={styles.itemContainer}>
-          <ImageBackground
-            source={{
-              uri: 'https://drive.google.com/uc?id=1K46lRlholisxFEbShb1nR9YWHKTnApb6',
-            }} // Replace with your Google Drive image link
-            style={styles.itemBackground}>
-            {isFavoriteObj[item.id] === true ? (
-              <Button
-                buttonText=""
-                onClick={() => handleDeleteFavourites(item)}
-                style={styles.favButton}
-                styleCont={{marginTop: 1}}>
-                <Icon name="favorite" size={30} color="#ccc" />
-              </Button>
-            ) : (
-              <Button
-                buttonText=""
-                onClick={() => handleAddFavourites(item)}
-                style={styles.favButton}
-                styleCont={{marginTop: 1}}>
-                <Icon name="favorite-outline" size={30} color="#ccc" />
-              </Button>
-            )}
-            <View style={styles.itemContent}>
-              <Text style={styles.itemTitle}>{item.name}</Text>
-              <Text style={styles.itemDescription}>{item.area}</Text>
-            </View>
-          </ImageBackground>
+          <View style={styles.itemBackgroundContainer}>
+            <ImageBackground
+              source={{
+                uri: item.imageURL,
+              }} // Replace with your Google Drive image link
+              style={styles.itemBackground}>
+              {isFavoriteObj[item.id] === true ? (
+                <Button
+                  buttonText=""
+                  onClick={() => handleDeleteFavourites(item)}
+                  style={styles.favButton}
+                  styleCont={{marginTop: 1}}>
+                  <Icon name="favorite" size={30} color="#ccc" />
+                </Button>
+              ) : (
+                <Button
+                  buttonText=""
+                  onClick={() => handleAddFavourites(item)}
+                  style={styles.favButton}
+                  styleCont={{marginTop: 1}}>
+                  <Icon name="favorite-outline" size={30} color="#ccc" />
+                </Button>
+              )}
+              <View style={styles.itemContent}>
+                <Text style={styles.itemTitle}>{item.name}</Text>
+                <Text style={styles.itemDescription}>{item.area}</Text>
+              </View>
+            </ImageBackground>
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -213,7 +223,9 @@ function Search() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
+      <View style={styles.barView}>
+        <BackButton />
+        <Menu />
         <Input
           style={styles.searchInput}
           placeholder="Search for a garage"
@@ -227,19 +239,29 @@ function Search() {
           onSubmitEditing={handleSearchSubmit} // Handle the "Enter" click
         />
       </View>
-      <FlatList
-        data={searchedGarages}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        contentContainerStyle={styles.flatListContent}
-        onEndReached={handleNextPage}
-      />
-      <BackButton />
+
+      {searchedGarages !== null && searchedGarages.length !== 0 ? (
+        <FlatList
+          data={searchedGarages}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+          contentContainerStyle={styles.flatListContent}
+          onEndReached={handleNextPage}
+        />
+      ) : (
+        <View style={styles.emptyView}>
+          <Text style={styles.itemTitle}>No such garage exists</Text>
+        </View>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  emptyView: {
+    justifyContent: 'center',
+    padding: '25%',
+  },
   container: {
     justifyContent: 'center',
     padding: 20,
@@ -249,6 +271,11 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     backgroundColor: '#1f2937',
+  },
+  itemBackgroundContainer: {
+    borderBottomLeftRadius: 15, // Apply border radius to create rounded bottom corners
+    borderBottomRightRadius: 15,
+    overflow: 'hidden', // Clip content to the rounded corners
   },
   favButton: {
     position: 'absolute', // Position the button absolutely within the container
@@ -264,7 +291,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     color: '#24507b',
     marginRight: 0,
-    width: '100%',
+    width: '80%',
     fontFamily: 'italic',
     fontWeight: 'bold',
     fontSize: 18,
@@ -282,6 +309,7 @@ const styles = StyleSheet.create({
   },
   flatListContent: {
     paddingBottom: 20,
+    marginTop: 60,
   },
   itemContainer: {
     padding: 5,
@@ -292,16 +320,28 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-end',
     width: '100%',
-    height: 200,
+    height: 170,
     position: 'relative',
   },
   itemContent: {
     backgroundColor: '#1e4467',
     padding: 15,
-    borderRadius: 8,
     width: '100%',
     position: 'absolute',
     bottom: 0,
+  },
+  barView: {
+    resizeMode: 'cover',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    width: '100%',
+    height: 60,
+    paddingHorizontal: '2%',
+    marginBottom: 10,
+    position: 'absolute',
+    top: '3%',
+    left: '5%',
+    zIndex: 1,
   },
 });
 

@@ -9,8 +9,14 @@ const ConfigSlice = createSlice({
       longitude: 35.94400120899081,
       latitude: 31.99020511580862,
     },
+    availableSlots: [],
     searchTerm: null,
     renderedGarageId: null,
+    reservation: {
+      startTime: null,
+      endTime: null,
+      cost: null,
+    },
   },
   reducers: {
     changePath(state, action) {
@@ -37,6 +43,12 @@ const ConfigSlice = createSlice({
     changeRenderedGarageId(state, action) {
       return {...state, renderedGarageId: action.payload};
     },
+    changeAvailableSlots(state, action) {
+      return {...state, availableSlots: [...action.payload]};
+    },
+    changeReservation(state, action) {
+      return {...state, reservation: {...action.payload}};
+    },
   },
 });
 export {ConfigSlice};
@@ -48,4 +60,6 @@ export const {
   changeUserLocation,
   changeSearchTerm,
   changeRenderedGarageId,
+  changeAvailableSlots,
+  changeReservation,
 } = ConfigSlice.actions;

@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: '2%',
-    bottom: '3%',
+    top: '3%',
     right: '95%',
   },
 });
